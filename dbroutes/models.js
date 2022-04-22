@@ -1,7 +1,19 @@
-const db = require('../database/db');
+const db = require('./index.js');
 
 module.exports = {
-  getReviews: (req, res) => {}
+  readReviews: (callback) => {
+    var queryStr = ``;
 
-  getReviewsMeta: (req, res) => {}
+    db.query(queryStr, (err, results) => {
+      callback(err, results);
+    })
+  }
+
+  readReviewsMeta: (callback) => {
+    var queryStr = ``;
+
+    db.query(queryStr, (err, results) => {
+      callback(err, results);
+    });
+  }
 }
