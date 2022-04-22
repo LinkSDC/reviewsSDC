@@ -1,7 +1,12 @@
-var express = require('express');
-var db = require('./dbroutes');
+const express = require('express');
 
-var morgan = require('morgan');
-var cors = require('cors');
+const app = express();
+const router = require('./server/routes');
 
-var router = require()
+app.use(express.json());
+app.use('/api/fec2/rfp/reviews', router);
+const port = 3000;
+
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});

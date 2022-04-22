@@ -7,7 +7,7 @@ module.exports = {
     db.query(queryStr, (err, results) => {
       callback(err, results);
     })
-  }
+  },
 
   readReviewsMeta: (callback) => {
     var queryStr = ``;
@@ -15,5 +15,11 @@ module.exports = {
     db.query(queryStr, (err, results) => {
       callback(err, results);
     });
-  }
-}
+  },
+
+  // sendReview: () => {},
+
+  // changeHelpful: () => {},
+
+  // changeReport: () => {}
+};
