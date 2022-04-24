@@ -3,26 +3,27 @@ const models = require('./models.js');
 module.exports = {
   getReviews: (req, res) => {
 
-    const { product_id, sort} = req.query;
+    const { product_id } = req.query;
     const page = req.query.page || 1;
     const count = req.query.count || 5;
-    const results = [];
+    const { sort } = req.query || 'relevance';
 
-    const dataObj = {product: product_id, page, count, results};
-
-    models.readReviews(dataObj, (err, data) => {
+    models.readReviews(product_id, count, page, sort, (err, data) => {
       if (err) {
         console.log('err @ getreviews:', err);
         res.status(500);
       } else {
-        res.json(data);
+        const dataObj = {product_id, count, page, data};
+        res.json(dataObj);
       }
     })
   },
 
   getReviewsMeta: (req, res) => {
 
-    models.readReviewsMeta((err, data) => {
+    const { product_id } = req.query;
+
+    models.readReviewsMeta(product_id, (err, data) => {
       if (err) {
         console.log('err @ getReviewsMeta:', err);
         res.sendStatus(500);
@@ -33,14 +34,36 @@ module.exports = {
   },
 
   postReview: (req, res) => {
-    res.status(204).send();
+    models.sendReview({...req.body}, (err, data) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(data);
+      }
+    })
   },
 
   putHelpful: (req, res) => {
-    res.status(204).send();
+    const { review_id } = req.params;
+
+    models.changeHelpful(review_id, (err, data) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(data);
+      }
+    })
   },
 
   putReport: (req, res) => {
-    res.status(204).send();
+    const { review_id } = req.params;
+
+    models.changeReport(review_id, (err, data) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(data);
+      }
+    })
   }
 };
