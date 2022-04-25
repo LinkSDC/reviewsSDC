@@ -11,7 +11,7 @@ module.exports = {
     models.readReviews(product_id, count, page, sort, (err, data) => {
       if (err) {
         console.log('err @ getreviews:', err);
-        res.status(500);
+        res.sendStatus(500);
       } else {
         const dataObj = {product_id, count, page, data};
         res.json(dataObj);
@@ -36,7 +36,8 @@ module.exports = {
   postReview: (req, res) => {
     models.sendReview({...req.body}, (err, data) => {
       if (err) {
-        res.send(err);
+        console.log('err @ postReview: ', err);
+        res.sendStatus(500);
       } else {
         res.send(data);
       }
@@ -48,7 +49,8 @@ module.exports = {
 
     models.changeHelpful(review_id, (err, data) => {
       if (err) {
-        res.send(err);
+        console.log('err @ putHelpful: ', err);
+        res.sendStatus(500);
       } else {
         res.send(data);
       }
@@ -60,7 +62,8 @@ module.exports = {
 
     models.changeReport(review_id, (err, data) => {
       if (err) {
-        res.send(err);
+        console.log('err @ putReport: ', err);
+        res.sendStatus(500);
       } else {
         res.send(data);
       }
