@@ -38,10 +38,18 @@ CREATE TABLE IF NOT EXISTS characteristics_reviews (
   value SMALLINT
 );
 
+-- add foreign keys
 ALTER TABLE reviews_photos ADD FOREIGN KEY (review_id) REFERENCES reviews(review_id);
 ALTER TABLE characteristics_reviews ADD FOREIGN KEY (review_id) REFERENCES reviews(review_id);
 ALTER TABLE characteristics_reviews ADD FOREIGN KEY (characteristic_id) REFERENCES characteristics(id);
 
+-- port from csv files to tables
+COPY reviews FROM '/home/brc/reviewsSDC/reviews.csv' DELIMITER ',' CSV HEADER;
+COPY reviews_photos FROM '/home/brc/reviewsSDC/reviews_photos.csv' DELIMITER ',' CSV HEADER;
+COPY characteristics FROM '/home/brc/reviewsSDC/characteristics.csv' DELIMITER ',' CSV HEADER;
+COPY characteristics_reviews FROM '/home/brc/reviewsSDC/characteristics_reviews.csv' DELIMITER ',' CSV HEADER;
+
+-- create indexes on relevant tables
 CREATE INDEX idx_product_id ON reviews (product_id);
 CREATE INDEX idx_photos_review_id ON reviews_photos (review_id);
 CREATE INDEX idx_characteristics_id ON characteristics_reviews(review_id);
