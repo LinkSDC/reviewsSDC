@@ -12,7 +12,7 @@ module.exports = {
       sortField = 'helpfulness DESC, date DESC';
     }
 
-    const queryString = `SELECT review_id, rating, summary, recommend, response, body, to_timestamp(date / 1000) date, reviewer_name, helpfulness, (SELECT COALESCE(json_agg(row_to_json(reviews_photos)), '[]' :: json) reviews_photos FROM ( SELECT id, url FROM reviews_photos WHERE reviews_photos.review_id = reviews.review_id ) reviews_photos ) FROM reviews WHERE product_id = $1 AND reported = false ORDER BY $4 LIMIT $2 OFFSET $3`;
+    const queryString = `SELECT review_id, rating, summary, recommend, response, body, to_timestamp(date / 1000) date, reviewer_name, helpfulness, (SELECT COALESCE(json_agg(row_to_json(reviews_photos)), '[]' :: json) reviews_photos FROM ( SELECT id, url FROM reviews_photos WHERE reviews_photos.review_id = reviews.review_id ) reviews_photos ) FROM reviews WHERE product_id = $1 AND reported = false ORDER BY $4 LIMIT $2 OFFSET $3;`;
 
     db.query(queryString, [product_id, count, offset, sortField], (err, result) => {
         if (err) {
@@ -25,7 +25,6 @@ module.exports = {
   },
 
   readReviewsMeta: (id, callback) => {
-
     const queryString = `
     SELECT json_build_object (
       'id', ${id},
@@ -77,9 +76,9 @@ module.exports = {
 
   sendReview: ({ product_id, rating, summary, body, recommend, name, email, photos, characteristics }, callback) => {
     const date = Date.now();
-    const queryString = `INSERT INTO reviews VALUES (product_id = $1, rating = $2, summary = $3, recommend = $4, name = $6, email = $7, date = $8, reported = false, helpfulness = 0);`;
+    const queryString = `INSERT INTO reviews (product_id, rating, summary, body, recommend, reviewer_name, reviewer_email, date, reported, helpfulness) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
 
-    db.query(queryString, [product_id, rating, summary, body, recommend, name, email], (err, response) => {
+    db.query(queryString, [product_id, rating, summary, body, recommend, name, email, date, false, 0], (err, response) => {
       if (err) {
         callback(err, null);
       } else {
@@ -89,7 +88,7 @@ module.exports = {
   },
 
   changeHelpful: (review_id, callback) => {
-    const queryString = `UPDATE reviews SET helpfulness = helpfulness + 1 WHERE review_id = $1`;
+    const queryString = `UPDATE reviews SET helpfulness = helpfulness + 1 WHERE review_id = $1;`;
 
     db.query(queryString, [review_id], (err, response) => {
       if (err) {

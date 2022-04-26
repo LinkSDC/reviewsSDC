@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS reviews (
   reported BOOLEAN NOT NULL,
   reviewer_name TEXT NOT NULL,
   reviewer_email TEXT,
-  response TEXT NOT NULL,
+  response TEXT,
   helpfulness INT NOT NULL
 );
 
@@ -41,3 +41,6 @@ CREATE TABLE IF NOT EXISTS characteristics_reviews (
 ALTER TABLE reviews_photos ADD FOREIGN KEY (review_id) REFERENCES reviews(review_id);
 ALTER TABLE characteristics_reviews ADD FOREIGN KEY (review_id) REFERENCES reviews(review_id);
 ALTER TABLE characteristics_reviews ADD FOREIGN KEY (characteristic_id) REFERENCES characteristics(id);
+
+-- CREATE INDEX idx_reviews_photos ON reviews_photos(review_id);
+-- CREATE INDEX idx_
