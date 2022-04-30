@@ -2,6 +2,7 @@
 csvfiles
 sdc-db.pem
 sdc-actualdatabase.pem
+sdc-server2.pem
 database.dump
 
 # Logs
